@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> · Reservas Canchas</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="/">⚽ Reservas Canchas</a>
+  <nav>
+    <% if (currentUser) { %>
+      <a href="/canchas">Canchas</a>
+      <a href="/mis-reservas">Mis reservas</a>
+      <% if (currentUser.role === 'admin') { %><a href="/admin">Admin</a><% } %>
+      <form method="post" action="/logout" class="inline">
+        <button class="link" type="submit">Salir (<%= currentUser.name %>)</button>
+      </form>
+    <% } else { %>
+      <a href="/login">Ingresar</a>
+      <a href="/registro">Registrarse</a>
+    <% } %>
+  </nav>
+</header>
+<main class="container">
+<% if (flash) { %><div class="alert <%= flash.type %>"><%= flash.text %></div><% } %>

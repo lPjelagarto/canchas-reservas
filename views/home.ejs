@@ -1,0 +1,12 @@
+<%- include('partials/header') %>
+<section class="hero">
+  <h1>Reserva tu cancha sintética en minutos</h1>
+  <p>Consulta la disponibilidad por fecha y horario, reserva en línea y descarga tus reportes.</p>
+  <% if (currentUser) { %>
+    <a class="btn" href="/canchas">Ver canchas</a>
+  <% } else { %>
+    <a class="btn" href="/registro">Crear cuenta</a>
+    <a class="btn secondary" href="/login">Ingresar</a>
+  <% } %>
+</section>
+<%- include('partials/footer') %>

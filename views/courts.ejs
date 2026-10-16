@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+<h2>Canchas disponibles</h2>
+<div class="row">
+  <a class="btn <%= date === today ? '' : 'secondary' %>" href="/canchas?date=<%= today %>">Hoy</a>
+  <a class="btn <%= date === tomorrow ? '' : 'secondary' %>" href="/canchas?date=<%= tomorrow %>">Mañana</a>
+  <a class="btn <%= date === dayAfter ? '' : 'secondary' %>" href="/canchas?date=<%= dayAfter %>">Pasado mañana</a>
+</div>
+<form method="get" action="/canchas" class="row">
+  <label>Otra fecha (hasta 30 días)
+    <input type="date" name="date" value="<%= date %>" min="<%= today %>" max="<%= maxDate %>" onchange="this.form.submit()">
+  </label>
+  <noscript><button class="btn" type="submit">Ver</button></noscript>
+</form>
+
+<% if (courts.length === 0) { %>
+  <p class="muted">No hay canchas activas por el momento.</p>
+<% } else { %>
+  <div class="grid">
+    <% courts.forEach(c => { %>
+      <article class="card">
+        <h3><%= c.name %></h3>
+        <p class="tag"><%= c.type %></p>
+        <p class="price">$<%= Number(c.pricePerHour).toLocaleString('es-CO') %> <small>/ hora</small></p>
+        <a class="btn" href="/reservas/nueva?court=<%= c.id %>&date=<%= date %>">Ver horarios del <%= date %></a>
+      </article>
+    <% }) %>
+  </div>
+<% } %>
+<%- include('partials/footer') %>

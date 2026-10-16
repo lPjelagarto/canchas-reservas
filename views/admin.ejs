@@ -1,0 +1,87 @@
+<%- include('partials/header') %>
+<div class="row between">
+  <h2>Panel de administración</h2>
+  <div>
+    <a class="btn secondary" href="/reportes/reservas.pdf">Reservas PDF</a>
+    <a class="btn secondary" href="/reportes/reservas.xlsx">Reservas Excel</a>
+    <a class="btn secondary" href="/reportes/ingresos.pdf">Estadístico PDF</a>
+    <a class="btn secondary" href="/reportes/ingresos.xlsx">Estadístico Excel</a>
+  </div>
+</div>
+<p class="muted">Ingresos confirmados (total): <strong>$<%= Number(income).toLocaleString('es-CO') %></strong></p>
+
+<h3>Canchas</h3>
+<form method="post" action="/admin/canchas" class="row">
+  <input type="text" name="name" placeholder="Nombre (ej. Cancha 4)" required>
+  <select name="type">
+    <option>Fútbol 5</option><option>Fútbol 7</option><option>Fútbol 8</option>
+  </select>
+  <input type="number" name="pricePerHour" min="0" step="1000" placeholder="Precio por hora" required>
+  <button class="btn" type="submit">Agregar cancha</button>
+</form>
+<table>
+  <thead><tr><th>Nombre</th><th>Tipo</th><th>Precio/hora</th><th>Estado</th><th></th></tr></thead>
+  <tbody>
+    <% courts.forEach(c => { %>
+      <tr>
+        <td><%= c.name %></td>
+        <td><%= c.type %></td>
+        <td>$<%= Number(c.pricePerHour).toLocaleString('es-CO') %></td>
+        <td><span class="badge <%= c.active ? 'confirmada' : 'cancelada' %>"><%= c.active ? 'activa' : 'inactiva' %></span></td>
+        <td>
+          <form method="post" action="/admin/canchas/<%= c.id %>/estado" class="inline">
+            <button class="btn secondary small" type="submit"><%= c.active ? 'Desactivar' : 'Activar' %></button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<h3>Últimas reservas</h3>
+<table>
+  <thead><tr><th>Fecha</th><th>Horario</th><th>Cancha</th><th>Cliente</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
+  <tbody>
+    <% bookings.forEach(b => { %>
+      <tr>
+        <td><%= b.date %></td>
+        <td><%= String(b.startHour).padStart(2, '0') %>:00</td>
+        <td><%= b.courtName %></td>
+        <td><%= b.userName %></td>
+        <td>$<%= Number(b.price).toLocaleString('es-CO') %></td>
+        <td><span class="badge <%= b.status %>"><%= b.status %></span></td>
+        <td>
+          <% if (b.status === 'confirmada') { %>
+            <form method="post" action="/reservas/<%= b.id %>/cancelar" class="inline" onsubmit="return confirm('¿Cancelar esta reserva?')">
+              <input type="hidden" name="from" value="admin">
+              <button class="btn danger small" type="submit">Cancelar</button>
+            </form>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<h3>Usuarios</h3>
+<table>
+  <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th></th></tr></thead>
+  <tbody>
+    <% users.forEach(u => { %>
+      <tr>
+        <td><%= u.name %></td>
+        <td><%= u.email %></td>
+        <td><span class="badge <%= u.role === 'admin' ? 'admin' : 'confirmada' %>"><%= u.role %></span></td>
+        <td>
+          <% if (u.id !== currentUser.id) { %>
+            <form method="post" action="/admin/usuarios/<%= u.id %>/rol" class="inline">
+              <input type="hidden" name="role" value="<%= u.role === 'admin' ? 'cliente' : 'admin' %>">
+              <button class="btn secondary small" type="submit">Hacer <%= u.role === 'admin' ? 'cliente' : 'admin' %></button>
+            </form>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include('partials/footer') %>

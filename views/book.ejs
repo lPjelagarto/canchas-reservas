@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+<h2><%= court.name %> <small class="tag"><%= court.type %></small></h2>
+<p>Fecha: <strong><%= date %></strong> · Valor por hora: <strong>$<%= Number(court.pricePerHour).toLocaleString('es-CO') %></strong></p>
+<p><a href="/canchas?date=<%= date %>">← Cambiar cancha o fecha</a></p>
+
+<div class="slots">
+  <% slots.forEach(s => {
+       const label = String(s.hour).padStart(2, '0') + ':00 - ' + String(s.hour + 1).padStart(2, '0') + ':00'; %>
+    <% if (s.available) { %>
+      <form method="post" action="/reservas" class="slot">
+        <input type="hidden" name="court" value="<%= court.id %>">
+        <input type="hidden" name="date" value="<%= date %>">
+        <input type="hidden" name="startHour" value="<%= s.hour %>">
+        <button class="btn" type="submit"><%= label %></button>
+      </form>
+    <% } else { %>
+      <div class="slot"><button class="btn disabled" disabled><%= label %> · No disponible</button></div>
+    <% } %>
+  <% }) %>
+</div>
+<%- include('partials/footer') %>

@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+<div class="row between">
+  <h2>Mis reservas</h2>
+  <div>
+    <a class="btn secondary" href="/reportes/reservas.pdf">Descargar PDF</a>
+    <a class="btn secondary" href="/reportes/reservas.xlsx">Descargar Excel</a>
+  </div>
+</div>
+
+<% if (bookings.length === 0) { %>
+  <p class="muted">Aún no tienes reservas. <a href="/canchas">Reserva una cancha</a>.</p>
+<% } else { %>
+  <table>
+    <thead><tr><th>Fecha</th><th>Horario</th><th>Cancha</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
+    <tbody>
+      <% bookings.forEach(b => { %>
+        <tr>
+          <td><%= b.date %></td>
+          <td><%= String(b.startHour).padStart(2, '0') %>:00 - <%= String(b.startHour + 1).padStart(2, '0') %>:00</td>
+          <td><%= b.courtName + ' (' + b.courtType + ')' %></td>
+          <td>$<%= Number(b.price).toLocaleString('es-CO') %></td>
+          <td><span class="badge <%= b.status %>"><%= b.status %></span></td>
+          <td>
+            <% if (b.status === 'confirmada' && b.date >= today) { %>
+              <form method="post" action="/reservas/<%= b.id %>/cancelar" class="inline" onsubmit="return confirm('¿Cancelar esta reserva?')">
+                <button class="btn danger small" type="submit">Cancelar</button>
+              </form>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+<%- include('partials/footer') %>

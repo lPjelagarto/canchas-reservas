@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+<section class="card narrow">
+  <h2>Crear cuenta</h2>
+  <% if (locals.error) { %><div class="alert error"><%= error %></div><% } %>
+  <form method="post" action="/registro">
+    <label>Nombre completo
+      <input type="text" name="name" value="<%= form.name || '' %>" maxlength="80" required autofocus>
+    </label>
+    <label>Correo electrónico
+      <input type="email" name="email" value="<%= form.email || '' %>" required>
+    </label>
+    <label>Contraseña <small>(mínimo 8 caracteres, con letras y números)</small>
+      <input type="password" name="password" minlength="8" required>
+    </label>
+    <label>Confirmar contraseña
+      <input type="password" name="password2" minlength="8" required>
+    </label>
+    <button class="btn" type="submit">Registrarme</button>
+  </form>
+  <p class="muted">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+<section class="card narrow">
+  <h2>Iniciar sesión</h2>
+  <% if (locals.error) { %><div class="alert error"><%= error %></div><% } %>
+  <form method="post" action="/login">
+    <label>Correo electrónico
+      <input type="email" name="email" value="<%= form.email || '' %>" required autofocus>
+    </label>
+    <label>Contraseña
+      <input type="password" name="password" required>
+    </label>
+    <button class="btn" type="submit">Ingresar</button>
+  </form>
+  <p class="muted"><a href="/olvide-contrasena">¿Olvidaste tu contraseña?</a> · <a href="/registro">Crear cuenta</a></p>
+</section>
+<%- include('partials/footer') %>

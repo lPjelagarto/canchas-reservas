@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+<section class="card narrow">
+  <h2>Nueva contraseña</h2>
+  <% if (locals.error) { %><div class="alert error"><%= error %></div><% } %>
+  <form method="post" action="/restablecer/<%= token %>">
+    <label>Nueva contraseña <small>(mínimo 8 caracteres, con letras y números)</small>
+      <input type="password" name="password" minlength="8" required autofocus>
+    </label>
+    <label>Confirmar contraseña
+      <input type="password" name="password2" minlength="8" required>
+    </label>
+    <button class="btn" type="submit">Guardar contraseña</button>
+  </form>
+</section>
+<%- include('partials/footer') %>
